@@ -5,6 +5,7 @@ import com.uvg.mypokedex.data.model.Pokemon
 
 class HomeViewModel {
     fun getPokemonList(): List<Pokemon> {
+        // Los datos son de https://www.pokemon.com/us/pokedex/
         return listOf(
             Pokemon(
                 id = 131,
@@ -27,7 +28,7 @@ class HomeViewModel {
                 type = listOf(PokeType.WATER),
                 weaknesses = "Grass, Electric"
             ), Pokemon(
-                id = "025".toInt(),
+                id = 25,
                 name = "Pikachu",
                 height = 40.64,
                 weight = 13.2,
@@ -37,15 +38,15 @@ class HomeViewModel {
                 type = listOf(PokeType.ELECTRIC),
                 weaknesses = "Ground"
             ), Pokemon(
-                id = "10104".toInt(),
-                name = "Alolan Ninetales",
+                id = 38,
+                name = "Ninetales",
                 height = 109.22,
                 weight = 43.9,
                 category = "Fox",
-                abilities = "Snow Cloak",
+                abilities = "Flash Fire",
                 gender = "Male, Female",
-                type = listOf(PokeType.ICE, PokeType.FAIRY),
-                weaknesses = "Fire, Poison, Rock, Steel"
+                type = listOf(PokeType.FIRE),
+                weaknesses = "Water, Ground, Rock"
             ), Pokemon(
                 id = 407,
                 name = "Roserade",
@@ -66,6 +67,26 @@ class HomeViewModel {
                 gender = "Unknown",
                 type = listOf(PokeType.NORMAL),
                 weaknesses = "Fighting"
+            ), Pokemon(
+                id = 151,
+                name = "Mew",
+                height = 40.64,
+                weight = 8.8,
+                category = "New Species",
+                abilities = "Synchronize",
+                gender = "Unknown",
+                type = listOf(PokeType.PSYCHIC),
+                weaknesses = "Bug, Ghost, Dark"
+            ), Pokemon(
+                id = 707,
+                name = "Klefki",
+                height = 20.32,
+                weight = 6.6,
+                category = "Key Ring",
+                abilities = "Prankster",
+                gender = "Male, Female",
+                type = listOf(PokeType.STEEL, PokeType.FAIRY),
+                weaknesses = "Fire, Ground"
             )
         )
     }

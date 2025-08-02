@@ -2,7 +2,6 @@ package com.uvg.mypokedex.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -15,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.uvg.mypokedex.data.model.PokeType
@@ -39,27 +37,7 @@ import com.uvg.mypokedex.data.model.rockColor
 import com.uvg.mypokedex.data.model.steelColor
 import com.uvg.mypokedex.data.model.waterColor
 import com.uvg.mypokedex.ui.theme.AppTypography
-import com.uvg.mypokedex.ui.theme.MyPokedexTheme
-
-
-// Los datos son de https://www.pokemon.com/us/pokedex/ditto
-val testPokemon = Pokemon(
-    id = "10104".toInt(),
-    name = "Ditto",
-    height = 30.48,
-    weight = 8.8,
-    category = "Transform",
-    abilities = "Limber",
-    gender = "Unknown",
-    type = listOf(PokeType.ICE, PokeType.FAIRY),
-    weaknesses = "Fighting"
-)
-
-@Preview
-@Composable
-fun PokemonCardPreview() {
-    PokemonCard(testPokemon)
-}
+import java.util.Locale.getDefault
 
 fun getTypeColor(type: PokeType): Color {
     when (type) {
@@ -86,138 +64,49 @@ fun getTypeColor(type: PokeType): Color {
 
 @Composable
 fun PokemonCard(pokemon: Pokemon) {
-    MyPokedexTheme {
-        Card(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth(),
-            shape = MaterialTheme.shapes.medium,
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        colors = CardDefaults.cardColors(
+        containerColor = getTypeColor(pokemon.type.first())
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+            AsyncImage(
+                model = "https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png",
+                contentDescription = null,
+                modifier = Modifier.padding(10.dp)
+            )
+            Surface (
+                color = MaterialTheme.colorScheme.tertiaryContainer,
+                shape = MaterialTheme.shapes.large
             ) {
                 Column(
+                    modifier = Modifier.padding(10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    val lowercaseName = (pokemon.name).lowercase()
+                    val capitalizedName = lowercaseName.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            getDefault()
+                        ) else it.toString()
+                    }
                     Text(
-                        text = pokemon.name,
+                        text = (capitalizedName),
                         style = AppTypography.headlineMedium,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "#0${pokemon.id}", style = AppTypography.headlineSmall
+                        text = "#0${pokemon.id}", style = AppTypography.headlineSmall,
+                        fontWeight = FontWeight.Bold
                     )
-                }
-                AsyncImage(
-                    model = "https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png",
-                    contentDescription = null,
-                    modifier = Modifier.padding(5.dp)
-                )
-                Row {
-                    for (type in pokemon.type) {
-                        val typeColor = getTypeColor(type)
-                        Surface(
-                            modifier = Modifier.padding(5.dp),
-                            shape = MaterialTheme.shapes.small,
-                            color = typeColor
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(5.dp),
-                                text = "$type",
-                                style = AppTypography.bodyLarge
-                            )
-                        }
-                    }
-                }
-                Surface(
-                    modifier = Modifier.padding(10.dp), shape = MaterialTheme.shapes.medium
-                ) {
-                    Column(
-                        modifier = Modifier.padding(5.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.Start
-                    ) {
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                "Height: ",
-                                style = AppTypography.bodyMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                            Text("${pokemon.height} cm", style = AppTypography.bodyMedium)
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                "Weight: ",
-                                style = AppTypography.bodyMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                            Text("${pokemon.weight} lbs", style = AppTypography.bodyMedium)
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                "Gender: ",
-                                style = AppTypography.bodyMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                            Text(pokemon.gender, style = AppTypography.bodyMedium)
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                "Category: ",
-                                style = AppTypography.bodyMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                            Text(pokemon.category, style = AppTypography.bodyMedium)
-                        }
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                "Abilities: ",
-                                style = AppTypography.bodyMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                            Text(pokemon.abilities, style = AppTypography.bodyMedium)
-                        }
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                "Weaknesses: ",
-                                style = AppTypography.bodyMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = pokemon.weaknesses, style = AppTypography.bodyMedium
-                            )
-                        }
-                    }
                 }
             }
         }
