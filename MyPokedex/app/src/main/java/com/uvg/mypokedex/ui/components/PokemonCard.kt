@@ -39,26 +39,28 @@ import com.uvg.mypokedex.data.model.waterColor
 import com.uvg.mypokedex.ui.theme.AppTypography
 import java.util.Locale.getDefault
 
+// Referencia https://stackoverflow.com/questions/48018091/kotlin-return-can-be-lifted-out-of-when
+
 fun getTypeColor(type: PokeType): Color {
-    when (type) {
-        PokeType.BUG -> return bugColor
-        PokeType.DRAGON -> return dragonColor
-        PokeType.FAIRY -> return fairyColor
-        PokeType.FIRE -> return fireColor
-        PokeType.GHOST -> return ghostColor
-        PokeType.GROUND -> return groundColor
-        PokeType.NORMAL -> return normalColor
-        PokeType.PSYCHIC -> return psychicColor
-        PokeType.STEEL -> return steelColor
-        PokeType.DARK -> return darkColor
-        PokeType.ELECTRIC -> return electricColor
-        PokeType.FIGHTING -> return fightingColor
-        PokeType.FLYING -> return flyingColor
-        PokeType.GRASS -> return grassColor
-        PokeType.ICE -> return iceColor
-        PokeType.POISON -> return poisonColor
-        PokeType.ROCK -> return rockColor
-        PokeType.WATER -> return waterColor
+    return when (type) {
+        PokeType.BUG -> bugColor
+        PokeType.DRAGON -> dragonColor
+        PokeType.FAIRY -> fairyColor
+        PokeType.FIRE -> fireColor
+        PokeType.GHOST -> ghostColor
+        PokeType.GROUND -> groundColor
+        PokeType.NORMAL -> normalColor
+        PokeType.PSYCHIC -> psychicColor
+        PokeType.STEEL -> steelColor
+        PokeType.DARK -> darkColor
+        PokeType.ELECTRIC -> electricColor
+        PokeType.FIGHTING -> fightingColor
+        PokeType.FLYING -> flyingColor
+        PokeType.GRASS -> grassColor
+        PokeType.ICE -> iceColor
+        PokeType.POISON -> poisonColor
+        PokeType.ROCK -> rockColor
+        PokeType.WATER -> waterColor
     }
 }
 
@@ -71,7 +73,7 @@ fun PokemonCard(pokemon: Pokemon) {
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         colors = CardDefaults.cardColors(
-        containerColor = getTypeColor(pokemon.type.first())
+            containerColor = getTypeColor(pokemon.type.first())
         )
     ) {
         Column(
@@ -84,7 +86,7 @@ fun PokemonCard(pokemon: Pokemon) {
                 contentDescription = null,
                 modifier = Modifier.padding(10.dp)
             )
-            Surface (
+            Surface(
                 color = MaterialTheme.colorScheme.tertiaryContainer,
                 shape = MaterialTheme.shapes.large
             ) {
@@ -104,7 +106,8 @@ fun PokemonCard(pokemon: Pokemon) {
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "#0${pokemon.id}", style = AppTypography.headlineSmall,
+                        text = "#0${pokemon.id}",
+                        style = AppTypography.headlineSmall,
                         fontWeight = FontWeight.Bold
                     )
                 }
