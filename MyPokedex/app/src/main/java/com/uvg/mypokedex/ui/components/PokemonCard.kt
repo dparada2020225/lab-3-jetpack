@@ -18,22 +18,41 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.uvg.mypokedex.data.model.*
+import com.uvg.mypokedex.data.model.PokeType
+import com.uvg.mypokedex.data.model.Pokemon
+import com.uvg.mypokedex.data.model.bugColor
+import com.uvg.mypokedex.data.model.darkColor
+import com.uvg.mypokedex.data.model.dragonColor
+import com.uvg.mypokedex.data.model.electricColor
+import com.uvg.mypokedex.data.model.fairyColor
+import com.uvg.mypokedex.data.model.fightingColor
+import com.uvg.mypokedex.data.model.fireColor
+import com.uvg.mypokedex.data.model.flyingColor
+import com.uvg.mypokedex.data.model.ghostColor
+import com.uvg.mypokedex.data.model.grassColor
+import com.uvg.mypokedex.data.model.groundColor
+import com.uvg.mypokedex.data.model.iceColor
+import com.uvg.mypokedex.data.model.normalColor
+import com.uvg.mypokedex.data.model.poisonColor
+import com.uvg.mypokedex.data.model.psychicColor
+import com.uvg.mypokedex.data.model.rockColor
+import com.uvg.mypokedex.data.model.steelColor
+import com.uvg.mypokedex.data.model.waterColor
 import com.uvg.mypokedex.ui.theme.AppTypography
 import com.uvg.mypokedex.ui.theme.MyPokedexTheme
 
 
 // Los datos son de https://www.pokemon.com/us/pokedex/ditto
 val testPokemon = Pokemon(
-    id = 132,
+    id = "10104".toInt(),
     name = "Ditto",
     height = 30.48,
     weight = 8.8,
     category = "Transform",
     abilities = "Limber",
     gender = "Unknown",
-    type = PokeType.NORMAL,
-    weaknesses = PokeType.FIGHTING
+    type = listOf(PokeType.ICE, PokeType.FAIRY),
+    weaknesses = "Fighting"
 )
 
 @Preview
@@ -42,8 +61,8 @@ fun PokemonCardPreview() {
     PokemonCard(testPokemon)
 }
 
-fun getTypeColor(pokemon: Pokemon): Color {
-    when (pokemon.type) {
+fun getTypeColor(type: PokeType): Color {
+    when (type) {
         PokeType.BUG -> return bugColor
         PokeType.DRAGON -> return dragonColor
         PokeType.FAIRY -> return fairyColor
@@ -67,7 +86,6 @@ fun getTypeColor(pokemon: Pokemon): Color {
 
 @Composable
 fun PokemonCard(pokemon: Pokemon) {
-    val typeColor = getTypeColor(pokemon)
     MyPokedexTheme {
         Card(
             modifier = Modifier
@@ -77,8 +95,7 @@ fun PokemonCard(pokemon: Pokemon) {
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
             Column(
-                modifier = Modifier
-                    .padding(16.dp),
+                modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -91,8 +108,7 @@ fun PokemonCard(pokemon: Pokemon) {
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "#0${pokemon.id}",
-                        style = AppTypography.headlineSmall
+                        text = "#0${pokemon.id}", style = AppTypography.headlineSmall
                     )
                 }
                 AsyncImage(
@@ -100,20 +116,24 @@ fun PokemonCard(pokemon: Pokemon) {
                     contentDescription = null,
                     modifier = Modifier.padding(5.dp)
                 )
-                Surface(
-                    modifier = Modifier.padding(5.dp),
-                    shape = MaterialTheme.shapes.small,
-                    color = typeColor
-                ) {
-                    Text(
-                        modifier = Modifier.padding(5.dp),
-                        text = "${pokemon.type}",
-                        style = AppTypography.bodyLarge
-                    )
+                Row {
+                    for (type in pokemon.type) {
+                        val typeColor = getTypeColor(type)
+                        Surface(
+                            modifier = Modifier.padding(5.dp),
+                            shape = MaterialTheme.shapes.small,
+                            color = typeColor
+                        ) {
+                            Text(
+                                modifier = Modifier.padding(5.dp),
+                                text = "$type",
+                                style = AppTypography.bodyLarge
+                            )
+                        }
+                    }
                 }
                 Surface(
-                    modifier = Modifier.padding(10.dp),
-                    shape = MaterialTheme.shapes.medium
+                    modifier = Modifier.padding(10.dp), shape = MaterialTheme.shapes.medium
                 ) {
                     Column(
                         modifier = Modifier.padding(5.dp),
@@ -193,8 +213,9 @@ fun PokemonCard(pokemon: Pokemon) {
                                 style = AppTypography.bodyMedium,
                                 fontWeight = FontWeight.Bold
                             )
-
-                            Text("${pokemon.weaknesses}", style = AppTypography.bodyMedium)
+                            Text(
+                                text = pokemon.weaknesses, style = AppTypography.bodyMedium
+                            )
                         }
                     }
                 }

@@ -21,16 +21,14 @@ val bodyFontLocal = Font(R.font.abeezee)
 val displayFontLocal = Font(R.font.anuphan)
 
 val bodyFontFamily = FontFamily(
-    bodyFontLocal,
-    Font(
+    bodyFontLocal, Font(
         googleFont = GoogleFont("ABeeZee"),
         fontProvider = provider,
     )
 )
 
 val displayFontFamily = FontFamily(
-    displayFontLocal,
-    Font(
+    displayFontLocal, Font(
         googleFont = GoogleFont("Anuphan"),
         fontProvider = provider,
     )
