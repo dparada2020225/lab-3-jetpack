@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.uvg.mypokedex.data.model.Pokemon
 import com.uvg.mypokedex.data.model.Stat
+import com.uvg.mypokedex.data.model.StatBar
 import com.uvg.mypokedex.ui.features.home.HomeViewModel
 
 @Composable
@@ -32,7 +33,7 @@ fun StatRow(stat: Stat) {
         Text(
             modifier = Modifier.weight(1f), text = "${stat.number}", textAlign = TextAlign.Center
         )
-        StatProgressBar(stat.number, 0F, 255F)
+        stat.StatBar()
     }
 }
 
@@ -60,20 +61,4 @@ fun StatsRow(pokemon: Pokemon) {
 fun PreviewPokemonStatRow() {
     val pokemon = (HomeViewModel().getPokemonList())[1]
     StatsRow(pokemon)
-}
-
-
-// Para este composable, si le solicite ayuda a la IA para crear una barra de progreso que pudiera reutilizar segun el valor maximo de cada base stat.
-// Siguiendo los valores maximos que encontre en https://www.serebii.net/pokedex-xy/stat/hp.shtml, comparado con el valor del pokemon actual. Me proporciono el siguiente bloque de codigo:
-
-@Composable
-fun StatProgressBar(statValue: Float, min: Float = 0F, max: Float = 255F) {
-    val progress = ((statValue - min) / (max - min))
-    LinearProgressIndicator(
-        modifier = Modifier.fillMaxWidth(0.5f),
-        progress = { progress },
-        color = Color(0xFFd6c76d),
-        trackColor = Color(0xFF2f4e38),
-        strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
-    )
 }
