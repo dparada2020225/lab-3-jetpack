@@ -1,5 +1,6 @@
 package com.uvg.mypokedex.ui.components
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,7 +24,10 @@ import com.uvg.mypokedex.ui.theme.AppTypography
 
 @Composable
 fun PokemonMeasurements(pokemon: Pokemon) {
-    Surface {
+    Surface (
+        color = if (isSystemInDarkTheme()) Color(0xFF2f4e38) else Color(0xFFe7e2d4),
+//        shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
