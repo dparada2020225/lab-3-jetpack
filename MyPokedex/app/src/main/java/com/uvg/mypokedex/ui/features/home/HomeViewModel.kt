@@ -2,6 +2,8 @@ package com.uvg.mypokedex.ui.features.home
 
 import com.uvg.mypokedex.data.model.PokeType
 import com.uvg.mypokedex.data.model.Pokemon
+import com.uvg.mypokedex.data.model.Stat
+import com.uvg.mypokedex.data.model.Stats
 
 class HomeViewModel {
     fun getPokemonList(): List<Pokemon> {
@@ -17,7 +19,14 @@ class HomeViewModel {
                 gender = "Male, Female",
                 type = listOf(PokeType.WATER),
                 weaknesses = "Grass, Electric, Fighting, Rock",
-                stats = TODO()
+                stats = Stats(
+                    hp = Stat(130f, "HP"),
+                    attack = Stat(85f, "Attack"),
+                    defense = Stat(80f, "Defense"),
+                    specialAttack = Stat(85f, "Special Attack"),
+                    specialDefense = Stat(95f, "Special Defense"),
+                    speed = Stat(60f, "Speed")
+                )
             ), Pokemon(
                 id = 393,
                 name = "Piplup",
@@ -28,7 +37,14 @@ class HomeViewModel {
                 gender = "Male, Female",
                 type = listOf(PokeType.WATER),
                 weaknesses = "Grass, Electric",
-                stats = TODO()
+                stats = Stats(
+                    hp = Stat(53f, "HP"),
+                    attack = Stat(51f, "Attack"),
+                    defense = Stat(53f, "Defense"),
+                    specialAttack = Stat(61f, "Special Attack"),
+                    specialDefense = Stat(56f, "Special Defense"),
+                    speed = Stat(40f, "Speed")
+                )
             ), Pokemon(
                 id = 25,
                 name = "Pikachu",
@@ -39,7 +55,14 @@ class HomeViewModel {
                 gender = "Male, Female",
                 type = listOf(PokeType.ELECTRIC),
                 weaknesses = "Ground",
-                stats = TODO()
+                stats = Stats(
+                    hp = Stat(35f, "HP"),
+                    attack = Stat(55f, "Attack"),
+                    defense = Stat(40f, "Defense"),
+                    specialAttack = Stat(50f, "Special Attack"),
+                    specialDefense = Stat(50f, "Special Defense"),
+                    speed = Stat(90f, "Speed")
+                )
             ), Pokemon(
                 id = 38,
                 name = "Ninetales",
@@ -50,7 +73,14 @@ class HomeViewModel {
                 gender = "Male, Female",
                 type = listOf(PokeType.FIRE),
                 weaknesses = "Water, Ground, Rock",
-                stats = TODO()
+                stats = Stats(
+                    hp = Stat(73f, "HP"),
+                    attack = Stat(76f, "Attack"),
+                    defense = Stat(75f, "Defense"),
+                    specialAttack = Stat(81f, "Special Attack"),
+                    specialDefense = Stat(100f, "Special Defense"),
+                    speed = Stat(100f, "Speed")
+                )
             ), Pokemon(
                 id = 407,
                 name = "Roserade",
@@ -61,7 +91,14 @@ class HomeViewModel {
                 gender = "Male, Female",
                 type = listOf(PokeType.GRASS, PokeType.POISON),
                 weaknesses = "Fire, Ice, Flying, Psychic",
-                stats = TODO()
+                stats = Stats(
+                    hp = Stat(60f, "HP"),
+                    attack = Stat(70f, "Attack"),
+                    defense = Stat(65f, "Defense"),
+                    specialAttack = Stat(125f, "Special Attack"),
+                    specialDefense = Stat(105f, "Special Defense"),
+                    speed = Stat(90f, "Speed")
+                )
             ), Pokemon(
                 id = 132,
                 name = "Ditto",
@@ -72,7 +109,14 @@ class HomeViewModel {
                 gender = "Unknown",
                 type = listOf(PokeType.NORMAL),
                 weaknesses = "Fighting",
-                stats = TODO()
+                stats = Stats(
+                    hp = Stat(48f, "HP"),
+                    attack = Stat(48f, "Attack"),
+                    defense = Stat(48f, "Defense"),
+                    specialAttack = Stat(48f, "Special Attack"),
+                    specialDefense = Stat(48f, "Special Defense"),
+                    speed = Stat(48f, "Speed")
+                )
             ), Pokemon(
                 id = 151,
                 name = "Mew",
@@ -83,7 +127,14 @@ class HomeViewModel {
                 gender = "Unknown",
                 type = listOf(PokeType.PSYCHIC),
                 weaknesses = "Bug, Ghost, Dark",
-                stats = TODO()
+                stats = Stats(
+                    hp = Stat(100f, "HP"),
+                    attack = Stat(100f, "Attack"),
+                    defense = Stat(100f, "Defense"),
+                    specialAttack = Stat(100f, "Special Attack"),
+                    specialDefense = Stat(100f, "Special Defense"),
+                    speed = Stat(100f, "Speed")
+                )
             ), Pokemon(
                 id = 707,
                 name = "Klefki",
@@ -94,7 +145,14 @@ class HomeViewModel {
                 gender = "Male, Female",
                 type = listOf(PokeType.STEEL, PokeType.FAIRY),
                 weaknesses = "Fire, Ground",
-                stats = TODO()
+                stats = Stats(
+                    hp = Stat(57f, "HP"),
+                    attack = Stat(80f, "Attack"),
+                    defense = Stat(91f, "Defense"),
+                    specialAttack = Stat(80f, "Special Attack"),
+                    specialDefense = Stat(87f, "Special Defense"),
+                    speed = Stat(75f, "Speed")
+                )
             )
         )
     }
