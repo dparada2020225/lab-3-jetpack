@@ -23,8 +23,8 @@ class HomeViewModel {
                     hp = Stat(130f, "HP"),
                     attack = Stat(85f, "Attack"),
                     defense = Stat(80f, "Defense"),
-                    specialAttack = Stat(85f, "Special Attack"),
-                    specialDefense = Stat(95f, "Special Defense"),
+                    specialAttack = Stat(85f, "Sp. Attack"),
+                    specialDefense = Stat(95f, "Sp. Defense"),
                     speed = Stat(60f, "Speed")
                 )
             ), Pokemon(
@@ -41,8 +41,8 @@ class HomeViewModel {
                     hp = Stat(53f, "HP"),
                     attack = Stat(51f, "Attack"),
                     defense = Stat(53f, "Defense"),
-                    specialAttack = Stat(61f, "Special Attack"),
-                    specialDefense = Stat(56f, "Special Defense"),
+                    specialAttack = Stat(61f, "Sp. Attack"),
+                    specialDefense = Stat(56f, "Sp. Defense"),
                     speed = Stat(40f, "Speed")
                 )
             ), Pokemon(
@@ -59,8 +59,8 @@ class HomeViewModel {
                     hp = Stat(35f, "HP"),
                     attack = Stat(55f, "Attack"),
                     defense = Stat(40f, "Defense"),
-                    specialAttack = Stat(50f, "Special Attack"),
-                    specialDefense = Stat(50f, "Special Defense"),
+                    specialAttack = Stat(50f, "Sp. Attack"),
+                    specialDefense = Stat(50f, "Sp. Defense"),
                     speed = Stat(90f, "Speed")
                 )
             ), Pokemon(
@@ -77,8 +77,8 @@ class HomeViewModel {
                     hp = Stat(73f, "HP"),
                     attack = Stat(76f, "Attack"),
                     defense = Stat(75f, "Defense"),
-                    specialAttack = Stat(81f, "Special Attack"),
-                    specialDefense = Stat(100f, "Special Defense"),
+                    specialAttack = Stat(81f, "Sp. Attack"),
+                    specialDefense = Stat(100f, "Sp. Defense"),
                     speed = Stat(100f, "Speed")
                 )
             ), Pokemon(
@@ -95,8 +95,8 @@ class HomeViewModel {
                     hp = Stat(60f, "HP"),
                     attack = Stat(70f, "Attack"),
                     defense = Stat(65f, "Defense"),
-                    specialAttack = Stat(125f, "Special Attack"),
-                    specialDefense = Stat(105f, "Special Defense"),
+                    specialAttack = Stat(125f, "Sp. Attack"),
+                    specialDefense = Stat(105f, "Sp. Defense"),
                     speed = Stat(90f, "Speed")
                 )
             ), Pokemon(
@@ -113,8 +113,8 @@ class HomeViewModel {
                     hp = Stat(48f, "HP"),
                     attack = Stat(48f, "Attack"),
                     defense = Stat(48f, "Defense"),
-                    specialAttack = Stat(48f, "Special Attack"),
-                    specialDefense = Stat(48f, "Special Defense"),
+                    specialAttack = Stat(48f, "Sp. Attack"),
+                    specialDefense = Stat(48f, "Sp. Defense"),
                     speed = Stat(48f, "Speed")
                 )
             ), Pokemon(
@@ -131,8 +131,8 @@ class HomeViewModel {
                     hp = Stat(100f, "HP"),
                     attack = Stat(100f, "Attack"),
                     defense = Stat(100f, "Defense"),
-                    specialAttack = Stat(100f, "Special Attack"),
-                    specialDefense = Stat(100f, "Special Defense"),
+                    specialAttack = Stat(100f, "Sp. Attack"),
+                    specialDefense = Stat(100f, "Sp. Defense"),
                     speed = Stat(100f, "Speed")
                 )
             ), Pokemon(
@@ -149,8 +149,8 @@ class HomeViewModel {
                     hp = Stat(57f, "HP"),
                     attack = Stat(80f, "Attack"),
                     defense = Stat(91f, "Defense"),
-                    specialAttack = Stat(80f, "Special Attack"),
-                    specialDefense = Stat(87f, "Special Defense"),
+                    specialAttack = Stat(80f, "Sp. Attack"),
+                    specialDefense = Stat(87f, "Sp. Defense"),
                     speed = Stat(75f, "Speed")
                 )
             )

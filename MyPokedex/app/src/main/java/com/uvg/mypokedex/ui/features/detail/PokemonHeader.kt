@@ -2,6 +2,7 @@ package com.uvg.mypokedex.ui.features.detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,7 +23,7 @@ import java.util.Locale.getDefault
 @Composable
 fun PokemonHeader(pokemon: Pokemon) {
     Column(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier.padding(14.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -48,21 +49,24 @@ fun PokemonHeader(pokemon: Pokemon) {
             Text(
                 modifier = Modifier.padding(bottom = 15.dp),
                 text = "#0${pokemon.id}",
-                style = AppTypography.titleSmall,
+                style = AppTypography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
-            for (type in pokemon.type) {
-                val typeColor = getTypeColor(type)
-                Surface(
-                    modifier = Modifier.padding(2.dp),
-                    shape = MaterialTheme.shapes.small,
-                    color = typeColor
-                ) {
-                    Text(
-                        modifier = Modifier.padding(3.dp),
-                        text = "$type",
-                        style = AppTypography.bodyMedium
-                    )
+            Row {
+                for (type in pokemon.type) {
+                    val typeColor = getTypeColor(type)
+                    Surface(
+                        modifier = Modifier.padding(4.dp),
+                        shape = MaterialTheme.shapes.small,
+                        color = typeColor
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(7.dp),
+                            text = "$type",
+                            style = AppTypography.bodyLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }

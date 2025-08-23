@@ -1,4 +1,4 @@
-package com.uvg.mypokedex.ui.components
+package com.uvg.mypokedex.ui.features.detail
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -28,11 +28,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.uvg.mypokedex.ui.theme.AppTypography
 
-/* TopBar: La barra superior con la flecha para atrás, el nombre y el
-corazón. ¿Será una buena idea que éste integre al corazón? ¿Qué sucede
-si más adelante quiero usar el TopBar dónde no se usa el corazón? ¿Qué
-sucede si el corazón lo quiero reusar incluyendo su comportamiento? */
-
 // Referencia: https://developer.android.com/develop/ui/compose/components/icon-button
 
 @Preview
@@ -44,7 +39,7 @@ fun BookmarkPageHeart() {
             onClick = { isToggled = !isToggled }) {
             Icon(
                 imageVector = if (isToggled) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                contentDescription = if (isToggled) "Selected filled favorite button icon" else "Unselected outlined favorite button icon",
+                contentDescription = if (isToggled) "Selected favorite button" else "Unselected favorite button",
                 tint = if (isToggled) Color.Red else if (isSystemInDarkTheme()) Color.White else Color.Black
             )
         }
@@ -74,9 +69,11 @@ fun NameTopBar(
         } else {
             // Referencia: https://foso.github.io/Jetpack-Compose-Playground/foundation/layout/spacer/
 
-            Spacer(modifier = Modifier
-                .size(40.dp)
-                .padding(8.dp))
+            Spacer(
+                modifier = Modifier
+                    .size(40.dp)
+                    .padding(8.dp)
+            )
         }
     }
 }

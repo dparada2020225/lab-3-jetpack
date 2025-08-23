@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
@@ -18,15 +17,16 @@ data class Stats(
 )
 
 data class Stat(
-    val number: Float,
-    val name: String
+    val number: Float, val name: String
 )
 
-// Siguiendo los valores maximos que encontre en https://www.serebii.net/pokedex-xy/stat/hp.shtml, comparado con el valor del pokemon actual.
+// Para este composable, si solicite ayuda de la IA. Preguntandole que necesitaba para hacer un barra de progreso para los stats,
+// tomando los valores maximos que encontre en
+// https://www.serebii.net/pokedex-xy/stat/hp.shtml, comparado con el valor que tiene el pokemon actual.
 
 @Composable
 fun Stat.StatBar() {
-    val max = when(this.name) {
+    val max = when (this.name) {
         "HP" -> 255F
         "Attack" -> 190F
         "Defense" -> 230F
