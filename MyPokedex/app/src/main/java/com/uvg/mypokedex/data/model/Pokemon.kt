@@ -4,9 +4,10 @@ package com.uvg.mypokedex.data.model
 
 data class Pokemon(
     val id: Int,
+    val stats: Stats,
+    val weight: Float,
+    val height: Float,
     val name: String,
-    val height: Double,
-    val weight: Double,
     val category: String,
     val abilities: String,
     val gender: String,
