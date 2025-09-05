@@ -153,6 +153,44 @@ class HomeViewModel {
                     specialDefense = Stat(87f, "Sp. Defense"),
                     speed = Stat(75f, "Speed")
                 )
+            ),
+            Pokemon(
+                id = 2,
+                name = "Ivysaur",
+                height = 20.32F,
+                weight = 6.6F,
+                category = "Seed",
+                abilities = "Overgrow",
+                gender = "Male, Female",
+                type = listOf(PokeType.GRASS, PokeType.POISON),
+                weaknesses = "Fire, Ice, Flying, Psychic",
+                stats = Stats(
+                    hp = Stat(57f, "HP"),
+                    attack = Stat(80f, "Attack"),
+                    defense = Stat(91f, "Defense"),
+                    specialAttack = Stat(80f, "Sp. Attack"),
+                    specialDefense = Stat(87f, "Sp. Defense"),
+                    speed = Stat(75f, "Speed")
+                )
+            ),
+            Pokemon(
+                id = 7,
+                name = "Squirtle",
+                height = 20.32F,
+                weight = 6.6F,
+                category = "Tiny Turtle",
+                abilities = "Torrent",
+                gender = "Male, Female",
+                type = listOf(PokeType.WATER),
+                weaknesses = "Grass, Electric",
+                stats = Stats(
+                    hp = Stat(57f, "HP"),
+                    attack = Stat(80f, "Attack"),
+                    defense = Stat(91f, "Defense"),
+                    specialAttack = Stat(80f, "Sp. Attack"),
+                    specialDefense = Stat(87f, "Sp. Defense"),
+                    speed = Stat(75f, "Speed")
+                )
             )
         )
     }
