@@ -76,6 +76,6 @@ fun PokemonHeader(pokemon: Pokemon) {
 @Preview
 @Composable
 fun PreviewPokemonHeader() {
-    val pokemon = (HomeViewModel().getPokemonList())[1]
+    val pokemon = (HomeViewModel().loadMorePokemon())[1]
     PokemonHeader(pokemon)
 }

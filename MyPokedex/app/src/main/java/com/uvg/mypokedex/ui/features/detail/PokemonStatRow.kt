@@ -35,7 +35,7 @@ fun StatRow(stat: Stat) {
         )
         Text(
             modifier = Modifier.weight(1f),
-            text = "${stat.number}",
+            text = "${stat.value}",
             textAlign = TextAlign.Center,
             style = AppTypography.bodyLarge
         )
@@ -65,6 +65,6 @@ fun StatsRow(pokemon: Pokemon) {
 @Preview
 @Composable
 fun PreviewPokemonStatRow() {
-    val pokemon = (HomeViewModel().getPokemonList())[1]
+    val pokemon = (HomeViewModel().loadMorePokemon())[1]
     StatsRow(pokemon)
 }

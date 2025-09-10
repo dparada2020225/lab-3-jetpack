@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.Scaffold
 import com.uvg.mypokedex.ui.theme.MyPokedexTheme
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -14,7 +15,9 @@ class MainActivity : ComponentActivity() {
                 // Referencia del padding https://developer.android.com/develop/ui/compose/system/material-insets
 
                 Scaffold { innerPadding ->
-                    HomeScreen(innerPadding)
+                    HomeScreen(
+                        innerPadding
+                    )
                 }
             }
         }

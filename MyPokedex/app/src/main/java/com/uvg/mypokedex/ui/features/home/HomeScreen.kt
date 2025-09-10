@@ -21,7 +21,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,7 +31,7 @@ import com.uvg.mypokedex.data.model.Pokemon
 import com.uvg.mypokedex.ui.components.PokemonCard
 
 
-val pokemonList = HomeViewModel().getPokemonList()
+val pokemonList = HomeViewModel().loadMorePokemon()
 
 fun FilterPokemon(searchText: String): List<Pokemon> {
     if (searchText.isBlank()) {
@@ -57,7 +56,7 @@ fun OrderPokemon(pokemonList: List<Pokemon>, order: Boolean): List<Pokemon> {
 fun HomeScreen(paddingValues: PaddingValues, viewModel: HomeViewModel = HomeViewModel()) {
     var ordered by rememberSaveable { mutableStateOf(false) }
     var expanded by rememberSaveable { mutableStateOf(false) }
-    val pokemonList = viewModel.getPokemonList()
+    val pokemonList = viewModel.loadMorePokemon()
     var searchText by rememberSaveable { mutableStateOf("") }
     var filteredPokemonList by rememberSaveable { mutableStateOf(pokemonList) }
     Column(

@@ -90,6 +90,6 @@ fun PokemonMeasurements(pokemon: Pokemon) {
 @Preview
 @Composable
 fun PreviewPokemonMeasurements() {
-    val pokemon = (HomeViewModel().getPokemonList())[1]
+    val pokemon = (HomeViewModel().loadMorePokemon())[1]
     PokemonMeasurements(pokemon)
 }

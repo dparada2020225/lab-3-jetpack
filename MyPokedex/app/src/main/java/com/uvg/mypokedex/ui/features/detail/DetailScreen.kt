@@ -14,7 +14,7 @@ import com.uvg.mypokedex.ui.theme.MyPokedexTheme
 
 @Preview
 @Composable
-fun DetailScreen(pokemonList: List<Pokemon> = (HomeViewModel().getPokemonList())) {
+fun DetailScreen(pokemonList: List<Pokemon> = (HomeViewModel().loadMorePokemon())) {
     val pokemon = pokemonList[7]
     MyPokedexTheme {
         Scaffold { paddingValues ->
