@@ -26,14 +26,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.uvg.mypokedex.data.model.Pokemon
 import com.uvg.mypokedex.ui.components.PokemonCard
 
-
-val pokemonList = HomeViewModel().loadMorePokemon()
-
-fun FilterPokemon(searchText: String): List<Pokemon> {
+fun FilterPokemon(pokemonList: List<Pokemon>, searchText: String): List<Pokemon> {
     if (searchText.isBlank()) {
         return pokemonList
     } else {
@@ -53,7 +51,11 @@ fun OrderPokemon(pokemonList: List<Pokemon>, order: Boolean): List<Pokemon> {
 
 // Referencia: https://developer.android.com/develop/ui/compose/components/menu
 @Composable
-fun HomeScreen(paddingValues: PaddingValues, viewModel: HomeViewModel = HomeViewModel()) {
+fun HomeScreen(
+    paddingValues: PaddingValues,
+    viewModel: HomeViewModel = HomeViewModel(LocalContext.current)
+) {
+
     var ordered by rememberSaveable { mutableStateOf(false) }
     var expanded by rememberSaveable { mutableStateOf(false) }
     val pokemonList = viewModel.loadMorePokemon()
@@ -66,7 +68,7 @@ fun HomeScreen(paddingValues: PaddingValues, viewModel: HomeViewModel = HomeView
         Row(modifier = Modifier.padding(20.dp)) {
             TextField(value = searchText, onValueChange = {
                 searchText = it
-                filteredPokemonList = FilterPokemon(searchText)
+                filteredPokemonList = FilterPokemon(pokemonList, searchText)
             }, label = {
                 Text("Filtrar por nombre")
             })

@@ -1,14 +1,13 @@
 package com.uvg.mypokedex.ui.features.home
 
+import android.content.Context
+import android.util.JsonReader
 import com.uvg.mypokedex.data.model.Pokemon
+import java.io.InputStreamReader
 
-class HomeViewModel {
+
+class HomeViewModel (val context: Context) {
     private var currentPage: Int = 0
-
-    init {
-        loadMorePokemon()
-    }
-
     fun getPageFileName(): String {
         var fileName: String
         val ending = currentPage + 1
@@ -20,7 +19,10 @@ class HomeViewModel {
         currentPage++
         return fileName
     }
-    fun loadMorePokemon(fileName: String = getPageFileName()): List<Pokemon> {
+    fun loadMorePokemon(context: Context = this.context, fileName: String = getPageFileName()): List<Pokemon> {
+        val inputStream = context.assets.open(fileName)
+        val reader = JsonReader(InputStreamReader(inputStream))
         return listOf()
+
     }
 }

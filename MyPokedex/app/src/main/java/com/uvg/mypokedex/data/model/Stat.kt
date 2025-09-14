@@ -6,7 +6,6 @@ import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import kotlinx.serialization.Serializable
 
 data class Stats(
     val hp: Stat,
@@ -20,9 +19,6 @@ data class Stats(
 data class Stat(
     val value: Float, val name: String
 )
-
-@Serializable
-data class StatDTO(val name: String, val value: Float)
 
 // Para este composable, si solicite ayuda de la IA. Preguntandole que necesitaba para hacer un barra de progreso para los stats,
 // tomando los valores maximos que encontre en
