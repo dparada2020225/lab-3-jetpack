@@ -72,10 +72,3 @@ fun PokemonHeader(pokemon: Pokemon) {
         }
     }
 }
-
-@Preview
-@Composable
-fun PreviewPokemonHeader() {
-    val pokemon = (HomeViewModel().loadMorePokemon())[1]
-    PokemonHeader(pokemon)
-}

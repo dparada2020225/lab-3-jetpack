@@ -86,10 +86,3 @@ fun PokemonMeasurements(pokemon: Pokemon) {
         }
     }
 }
-
-@Preview
-@Composable
-fun PreviewPokemonMeasurements() {
-    val pokemon = (HomeViewModel().loadMorePokemon())[1]
-    PokemonMeasurements(pokemon)
-}

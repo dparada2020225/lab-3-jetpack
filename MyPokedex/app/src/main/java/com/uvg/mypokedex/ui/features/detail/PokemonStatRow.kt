@@ -61,10 +61,3 @@ fun StatsRow(pokemon: Pokemon) {
         StatRow(stats.speed)
     }
 }
-
-@Preview
-@Composable
-fun PreviewPokemonStatRow() {
-    val pokemon = (HomeViewModel().loadMorePokemon())[1]
-    StatsRow(pokemon)
-}

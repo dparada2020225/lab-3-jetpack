@@ -31,21 +31,21 @@ import androidx.compose.ui.unit.dp
 import com.uvg.mypokedex.data.model.Pokemon
 import com.uvg.mypokedex.ui.components.PokemonCard
 
-fun FilterPokemon(pokemonList: List<Pokemon>, searchText: String): List<Pokemon> {
-    if (searchText.isBlank()) {
-        return pokemonList
+fun filterPokemon(pokemonList: List<Pokemon>, searchText: String): List<Pokemon> {
+    return if (searchText.isBlank()) {
+        pokemonList
     } else {
-        return pokemonList.filter { it.name.contains(searchText, true) }
+        pokemonList.filter { it.name.contains(searchText, true) }
     }
 }
 
-fun OrderPokemon(pokemonList: List<Pokemon>, order: Boolean): List<Pokemon> {
-    if (order) {
-        return pokemonList.sortedBy {
+fun orderPokemon(pokemonList: List<Pokemon>, order: Boolean): List<Pokemon> {
+    return if (order) {
+        pokemonList.sortedBy {
             it.name
         }
     } else {
-        return pokemonList.sortedByDescending { it.name }
+        pokemonList.sortedByDescending { it.name }
     }
 }
 
@@ -68,7 +68,7 @@ fun HomeScreen(
         Row(modifier = Modifier.padding(20.dp)) {
             TextField(value = searchText, onValueChange = {
                 searchText = it
-                filteredPokemonList = FilterPokemon(pokemonList, searchText)
+                filteredPokemonList = filterPokemon(pokemonList, searchText)
             }, label = {
                 Text("Filtrar por nombre")
             })
@@ -98,7 +98,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.SpaceBetween,
             columns = GridCells.Fixed(2)
         ) {
-            items(OrderPokemon(filteredPokemonList, ordered)) { pokemon ->
+            items(orderPokemon(filteredPokemonList, ordered)) { pokemon ->
                 PokemonCard(pokemon)
             }
         }

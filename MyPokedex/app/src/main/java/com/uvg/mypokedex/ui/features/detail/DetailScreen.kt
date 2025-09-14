@@ -12,10 +12,9 @@ import com.uvg.mypokedex.data.model.Pokemon
 import com.uvg.mypokedex.ui.features.home.HomeViewModel
 import com.uvg.mypokedex.ui.theme.MyPokedexTheme
 
-@Preview
+
 @Composable
-fun DetailScreen(pokemonList: List<Pokemon> = (HomeViewModel().loadMorePokemon())) {
-    val pokemon = pokemonList[7]
+fun DetailScreen(pokemon: Pokemon) {
     MyPokedexTheme {
         Scaffold { paddingValues ->
             Column(
