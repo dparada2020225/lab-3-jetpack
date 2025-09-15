@@ -10,12 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.uvg.mypokedex.data.model.Pokemon
 import com.uvg.mypokedex.data.model.Stat
 import com.uvg.mypokedex.data.model.StatBar
-import com.uvg.mypokedex.ui.features.home.HomeViewModel
 import com.uvg.mypokedex.ui.theme.AppTypography
 
 @Composable
@@ -53,11 +51,8 @@ fun StatsRow(pokemon: Pokemon) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        StatRow(stats.hp)
-        StatRow(stats.attack)
-        StatRow(stats.defense)
-        StatRow(stats.specialAttack)
-        StatRow(stats.specialDefense)
-        StatRow(stats.speed)
+        pokemon.stats.forEach { stat ->
+            StatRow(stat)
+        }
     }
 }
