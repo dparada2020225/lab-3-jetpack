@@ -56,9 +56,11 @@ fun orderPokemon(pokemonList: List<Pokemon>, order: Boolean?): List<Pokemon> {
                 it.name
             }
         }
+
         false -> {
             pokemonList.sortedByDescending { it.name }
         }
+
         else -> {
             pokemonList
         }
@@ -150,23 +152,35 @@ fun HomeScreen(
         LaunchedEffect(savedState) {
             // Visualización de cambios en el Layout
             snapshotFlow { savedState.layoutInfo }.map { layoutInfo ->
-                    val totalItems = layoutInfo.totalItemsCount
-                    val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
-                    val shouldLoad = totalItems > 0 && lastVisibleItemIndex >= totalItems - 4
-                    shouldLoad
-                }.distinctUntilChanged().filter { it }.collect {
-                    // Carga más Pokémon del ViewModel
-                    val newPokemon = viewModel.loadMorePokemon()
-                    if (newPokemon.isNotEmpty()) {
-                        pokemonList.addAll(newPokemon)
+                val totalItems = layoutInfo.totalItemsCount
+                val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+                val shouldLoad = totalItems > 0 && lastVisibleItemIndex >= totalItems - 4
+                shouldLoad
+            }.distinctUntilChanged().filter { it }.collect {
+                val newPokemonBatch = viewModel.loadMorePokemon()
+                if (newPokemonBatch.isNotEmpty()) {
+
+                    // Cargar mas pokemones del ViewModel
+                    // Aqui le pedi ayuda a la IA por que me daba el problema de al ordenar la lista muchas veces seguidas, se daba un ID repetido. Me recomendo hacer un set.
+
+                    val existingIds = pokemonList.map { it.id }.toSet()
+                    val uniqueNewPokemon =
+                        newPokemonBatch.filter { it.id !in existingIds }.distinctBy { it.id }
+
+                    if (uniqueNewPokemon.isNotEmpty()) {
+                        pokemonList.addAll(uniqueNewPokemon)
                     } else {
-                        // Log para cuando no hay más Pokémon que cargar
                         Log.d(
                             "HomeScreen",
-                            "viewModel.loadMorePokemon() returned empty list."
+                            "Error when loading new pokemon viewModel.loadMorePokemon()"
                         )
                     }
+                } else {
+                    Log.d(
+                        "HomeScreen", "viewModel.loadMorePokemon() returned empty."
+                    )
                 }
+            }
         }
     }
 }
