@@ -18,6 +18,15 @@ import com.uvg.mypokedex.ui.theme.AppTypography
 
 @Composable
 fun StatRow(stat: Stat) {
+    val name = when (stat.name) {
+        "hp" -> "HP"
+        "attack" -> "Attack"
+        "defense" -> "Defense"
+        "special-attack" -> "Sp. Attack"
+        "special-defense" -> "Sp. Defense"
+        "speed" -> "Speed"
+        else -> "Stat"
+    } 
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,7 +52,7 @@ fun StatRow(stat: Stat) {
 
 @Composable
 fun StatsRow(pokemon: Pokemon) {
-    val stats = pokemon.stats
+    pokemon.stats
     Column(
         modifier = Modifier
             .fillMaxWidth()
