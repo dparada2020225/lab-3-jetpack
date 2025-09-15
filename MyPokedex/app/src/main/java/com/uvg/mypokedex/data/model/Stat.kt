@@ -7,17 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
-data class Stats(
-    val hp: Stat,
-    val attack: Stat,
-    val defense: Stat,
-    val specialAttack: Stat,
-    val specialDefense: Stat,
-    val speed: Stat
-)
-
 data class Stat(
-    val number: Float, val name: String
+    val value: Float, val name: String
 )
 
 // Para este composable, si solicite ayuda de la IA. Preguntandole que necesitaba para hacer un barra de progreso para los stats,
@@ -35,7 +26,7 @@ fun Stat.StatBar() {
         "Speed" -> 180F
         else -> 255F
     }
-    val progress = this.number / max
+    val progress = this.value / max
 
     LinearProgressIndicator(
         modifier = Modifier.fillMaxWidth(0.5f),

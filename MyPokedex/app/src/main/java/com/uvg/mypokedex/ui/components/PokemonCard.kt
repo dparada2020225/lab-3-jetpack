@@ -67,6 +67,7 @@ fun getTypeColor(type: PokeType): Color {
 
 @Composable
 fun PokemonCard(pokemon: Pokemon) {
+    // Card principal con color de fondo basado en el tipo primario del Pokémon
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -77,6 +78,7 @@ fun PokemonCard(pokemon: Pokemon) {
             containerColor = getTypeColor(pokemon.type.first())
         )
     ) {
+        // Contenedor de la tarjeta
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.Center,
@@ -85,6 +87,7 @@ fun PokemonCard(pokemon: Pokemon) {
             Row {
 
             }
+            // Imagen del Pokémon cargada de forma asíncrona desde la API oficial
             AsyncImage(
                 model = "https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png",
                 contentDescription = null,
@@ -95,20 +98,23 @@ fun PokemonCard(pokemon: Pokemon) {
                 shape = MaterialTheme.shapes.large
             ) {
                 Column(
-                    modifier = Modifier.padding(10.dp),
+                    modifier = Modifier.padding(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    // Procesamiento del nombre, convirtiendo en minusculas y comenzando con mayuscula
                     val lowercaseName = (pokemon.name).lowercase()
                     val capitalizedName = lowercaseName.replaceFirstChar {
                         if (it.isLowerCase()) it.titlecase(
                             getDefault()
                         ) else it.toString()
                     }
+                    // Nombre del Pokémon con tipografía mediana y negrita
                     Text(
                         text = (capitalizedName),
-                        style = AppTypography.headlineMedium,
+                        style = AppTypography.headlineSmall,
                         fontWeight = FontWeight.Bold
                     )
+                    // ID del Pokémon formateado con prefijo "#0"
                     Text(
                         text = "#0${pokemon.id}",
                         style = AppTypography.headlineSmall,

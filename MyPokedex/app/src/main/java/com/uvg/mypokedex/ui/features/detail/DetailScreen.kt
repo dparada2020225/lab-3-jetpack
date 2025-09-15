@@ -7,15 +7,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.uvg.mypokedex.data.model.Pokemon
-import com.uvg.mypokedex.ui.features.home.HomeViewModel
 import com.uvg.mypokedex.ui.theme.MyPokedexTheme
 
-@Preview
+
 @Composable
-fun DetailScreen(pokemonList: List<Pokemon> = (HomeViewModel().getPokemonList())) {
-    val pokemon = pokemonList[7]
+fun DetailScreen(pokemon: Pokemon) {
     MyPokedexTheme {
         Scaffold { paddingValues ->
             Column(

@@ -18,11 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.uvg.mypokedex.R
 import com.uvg.mypokedex.data.model.Pokemon
-import com.uvg.mypokedex.ui.features.home.HomeViewModel
 import com.uvg.mypokedex.ui.theme.AppTypography
 
 @Composable
@@ -85,11 +83,4 @@ fun PokemonMeasurements(pokemon: Pokemon) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewPokemonMeasurements() {
-    val pokemon = (HomeViewModel().getPokemonList())[1]
-    PokemonMeasurements(pokemon)
 }

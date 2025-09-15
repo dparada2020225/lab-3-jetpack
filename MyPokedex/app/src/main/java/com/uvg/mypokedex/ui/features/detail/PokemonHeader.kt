@@ -11,12 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.uvg.mypokedex.data.model.Pokemon
 import com.uvg.mypokedex.ui.components.getTypeColor
-import com.uvg.mypokedex.ui.features.home.HomeViewModel
 import com.uvg.mypokedex.ui.theme.AppTypography
 import java.util.Locale.getDefault
 
@@ -71,11 +69,4 @@ fun PokemonHeader(pokemon: Pokemon) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewPokemonHeader() {
-    val pokemon = (HomeViewModel().getPokemonList())[1]
-    PokemonHeader(pokemon)
 }
