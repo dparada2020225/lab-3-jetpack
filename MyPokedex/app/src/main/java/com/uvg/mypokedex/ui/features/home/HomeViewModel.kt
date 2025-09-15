@@ -4,7 +4,7 @@ import android.content.Context
 import com.uvg.mypokedex.data.model.PokeType
 import com.uvg.mypokedex.data.model.Pokemon
 import com.uvg.mypokedex.data.model.Stat
-import org.json.JSONArray
+import org.json.JSONObject
 import java.nio.charset.Charset
 
 
@@ -13,8 +13,10 @@ class HomeViewModel(val context: Context) {
     fun getPageFileName(): String {
         var fileName: String
         val ending = currentPage + 1
-        fileName = if (currentPage >= 0 && currentPage < 10) {
-            "pokemon_0${currentPage}1_10.json"
+        fileName = if (currentPage >= 0 && currentPage < 9) {
+            "pokemon_0${currentPage}1_0${ending}0.json"
+        } else if (currentPage == 9) {
+            "pokemon_0${currentPage}1_${ending}0.json"
         } else {
             "pokemon_${currentPage}1_${ending}0.json"
         }
@@ -30,7 +32,9 @@ class HomeViewModel(val context: Context) {
             val inputStream = context.assets.open(fileName)
             val jsonString =
                 inputStream.bufferedReader(Charset.defaultCharset()).use { it.readText() }
-            val jsonArray = JSONArray(jsonString)
+
+            val jsonOriginalObject = JSONObject(jsonString)
+            val jsonArray = jsonOriginalObject.getJSONArray("items")
 
             for (i in 0 until jsonArray.length()) {
                 val jsonObject = jsonArray.getJSONObject(i)
