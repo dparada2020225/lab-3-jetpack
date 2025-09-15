@@ -95,7 +95,7 @@ fun PokemonCard(pokemon: Pokemon) {
                 shape = MaterialTheme.shapes.large
             ) {
                 Column(
-                    modifier = Modifier.padding(10.dp),
+                    modifier = Modifier.padding(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     val lowercaseName = (pokemon.name).lowercase()
@@ -106,7 +106,7 @@ fun PokemonCard(pokemon: Pokemon) {
                     }
                     Text(
                         text = (capitalizedName),
-                        style = AppTypography.headlineMedium,
+                        style = AppTypography.headlineSmall,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
