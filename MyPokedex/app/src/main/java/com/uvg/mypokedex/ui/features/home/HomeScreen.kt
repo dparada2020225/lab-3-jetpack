@@ -70,33 +70,45 @@ fun orderPokemon(pokemonList: List<Pokemon>, order: Boolean?): List<Pokemon> {
 fun HomeScreen(
     paddingValues: PaddingValues, viewModel: HomeViewModel = HomeViewModel(LocalContext.current)
 ) {
+    // Estado para mantener la posición del scroll
     val savedState = rememberLazyGridState()
+
+    // Estado para mantener el orden de lista
     var ordered by rememberSaveable { mutableStateOf(false) }
+
+    // Estado para controlar la visibilidad del menu
     var expanded by rememberSaveable { mutableStateOf(false) }
+
+    // Texto para búqueda que persiste recomposiciones
     var searchText by rememberSaveable { mutableStateOf("") }
 
+    // Lista mutable que contiene todos los Pokémon cargados
     val pokemonList = remember {
         mutableStateListOf<Pokemon>().apply {
             addAll(viewModel.loadMorePokemon())
         }
     }
 
+    // Estado que calcula automáticamente la lista filtrada y ordenada
     val filteredAndOrdered by remember(searchText, pokemonList, ordered) {
         derivedStateOf {
             orderPokemon(filterPokemon(pokemonList, searchText), order = null)
         }
     }
 
+    // Contenedor de la pantalla
     Column(
         modifier = Modifier.padding(paddingValues),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Fila que contiene el campo de búsqueda y el botón de menú
         Row(modifier = Modifier.padding(20.dp)) {
             TextField(value = searchText, onValueChange = {
                 searchText = it
             }, label = {
                 Text("Filtrar por nombre")
             })
+            // Contenedor para el botón flotante y su menú desplegable
             Box {
                 FloatingActionButton(
                     modifier = Modifier.padding(horizontal = 7.dp),
@@ -107,6 +119,7 @@ fun HomeScreen(
                         tint = if (isSystemInDarkTheme()) Color.White else Color.Black
                     )
                 }
+                // Menú desplegable con opciones de ordenamiento
                 DropdownMenu(
                     expanded = expanded, onDismissRequest = { expanded = false }) {
                     DropdownMenuItem(
@@ -119,6 +132,7 @@ fun HomeScreen(
             }
         }
 
+        // LazyGrid que muestra las tarjetas de Pokémon en 2 columnas
         LazyVerticalGrid(
             state = savedState,
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
@@ -131,18 +145,22 @@ fun HomeScreen(
             }
         }
 
+        // Efecto para implementar scroll infinito
         // Aquí si le pedí ayuda a la IA, pues le pregunte que llave podia utilizar y formas de implementarla para lograr mi proposito de que cargaran más pokemones al llegar al final.
         LaunchedEffect(savedState) {
+            // Visualización de cambios en el Layout
             snapshotFlow { savedState.layoutInfo }.map { layoutInfo ->
                     val totalItems = layoutInfo.totalItemsCount
                     val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
                     val shouldLoad = totalItems > 0 && lastVisibleItemIndex >= totalItems - 4
                     shouldLoad
                 }.distinctUntilChanged().filter { it }.collect {
+                    // Carga más Pokémon del ViewModel
                     val newPokemon = viewModel.loadMorePokemon()
                     if (newPokemon.isNotEmpty()) {
                         pokemonList.addAll(newPokemon)
                     } else {
+                        // Log para cuando no hay más Pokémon que cargar
                         Log.d(
                             "HomeScreen",
                             "viewModel.loadMorePokemon() returned empty list."
