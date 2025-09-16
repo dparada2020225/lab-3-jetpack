@@ -10,6 +10,7 @@ import java.nio.charset.Charset
 
 class HomeViewModel(val context: Context) {
     private var currentPage: Int = 0
+
     fun getPageFileName(): String {
         var fileName: String
         val ending = currentPage + 1
