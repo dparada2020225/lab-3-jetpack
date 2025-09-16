@@ -26,7 +26,7 @@ fun StatRow(stat: Stat) {
         "special-defense" -> "Sp. Defense"
         "speed" -> "Speed"
         else -> "Stat"
-    } 
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -36,7 +36,7 @@ fun StatRow(stat: Stat) {
     ) {
         Text(
             modifier = Modifier.weight(1.2f),
-            text = stat.name,
+            text = name,
             textAlign = TextAlign.Center,
             style = AppTypography.bodyLarge
         )
