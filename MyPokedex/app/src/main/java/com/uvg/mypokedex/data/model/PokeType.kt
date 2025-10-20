@@ -1,6 +1,10 @@
 package com.uvg.mypokedex.data.model
 
-enum class PokeType {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+enum class PokeType : Parcelable {
     BUG, DRAGON, FAIRY, FIRE, GHOST, GROUND, NORMAL, PSYCHIC, STEEL, DARK, ELECTRIC, FIGHTING, FLYING, GRASS, ICE, POISON, ROCK, WATER;
 
     companion object {
