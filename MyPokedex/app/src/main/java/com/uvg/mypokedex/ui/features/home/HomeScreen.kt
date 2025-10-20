@@ -32,7 +32,7 @@ fun HomeScreen(
     val lazyGridState = rememberLazyGridState()
     var expanded by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
-
+    
     val filteredPokemon = remember(uiState.pokemonList, searchText) {
         if (searchText.isBlank()) {
             uiState.pokemonList
@@ -43,7 +43,7 @@ fun HomeScreen(
             }
         }
     }
-
+    
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier
@@ -68,9 +68,9 @@ fun HomeScreen(
                     ),
                     shape = MaterialTheme.shapes.small
                 )
-
+                
                 Spacer(modifier = Modifier.width(8.dp))
-
+                
                 FloatingActionButton(
                     onClick = { navController.navigate(AppScreen.SearchToolsDialog.route) },
                     modifier = Modifier.padding(horizontal = 7.dp)
@@ -80,7 +80,7 @@ fun HomeScreen(
                         contentDescription = "Search Tools"
                     )
                 }
-
+                
                 Box {
                     FloatingActionButton(
                         modifier = Modifier.padding(horizontal = 7.dp),
@@ -119,7 +119,7 @@ fun HomeScreen(
                     }
                 }
             }
-
+            
             // Manejo de estados
             when {
                 uiState.error != null && uiState.pokemonList.isEmpty() -> {
@@ -154,7 +154,7 @@ fun HomeScreen(
                                 navController.navigate(AppScreen.DetailScreen.createRoute(pokemon.id))
                             }
                         }
-
+                        
                         // Indicador de carga al final
                         if (uiState.isLoading && uiState.pokemonList.isNotEmpty()) {
                             item {
@@ -171,7 +171,7 @@ fun HomeScreen(
                     }
                 }
             }
-
+            
             // Infinite scroll
             LaunchedEffect(lazyGridState) {
                 snapshotFlow { lazyGridState.layoutInfo }

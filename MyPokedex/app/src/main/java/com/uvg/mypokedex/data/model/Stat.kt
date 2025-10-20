@@ -1,29 +1,32 @@
 package com.uvg.mypokedex.data.model
 
+import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
+@Parcelize
+@Serializable
 data class Stat(
     val value: Float, val name: String
-)
+) : Parcelable
 
-// Para este composable, si solicite ayuda de la IA. Preguntandole que necesitaba para hacer un barra de progreso para los stats,
-// tomando los valores maximos que encontre en
+// Para este composable, si solicite ayuda de la IA. Preguntandole que necesitaba para hacer un barra de progreso para los stats, tomando los valores maximos que encontre en
 // https://www.serebii.net/pokedex-xy/stat/hp.shtml, comparado con el valor que tiene el pokemon actual.
 
 @Composable
 fun Stat.StatBar() {
     val max = when (this.name) {
-        "HP" -> 255F
-        "Attack" -> 190F
-        "Defense" -> 230F
-        "Special Attack" -> 194F
-        "Special Defense" -> 230F
-        "Speed" -> 180F
+        "hp" -> 255F
+        "attack" -> 190F
+        "defense" -> 230F
+        "special-attack" -> 194F
+        "special-defense" -> 230F
+        "speed" -> 180F
         else -> 255F
     }
     val progress = this.value / max
@@ -31,8 +34,6 @@ fun Stat.StatBar() {
     LinearProgressIndicator(
         modifier = Modifier.fillMaxWidth(0.5f),
         progress = { progress },
-        color = Color(0xFFd6c76d),
-        trackColor = Color(0xFF2f4e38),
         strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
     )
 }

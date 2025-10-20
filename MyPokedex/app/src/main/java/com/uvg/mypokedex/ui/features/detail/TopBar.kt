@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.uvg.mypokedex.ui.theme.AppTypography
+import java.util.Locale
 
 // Referencia: https://developer.android.com/develop/ui/compose/components/icon-button
 
@@ -48,7 +49,7 @@ fun BookmarkPageHeart() {
 
 @Composable
 fun NameTopBar(
-    pokemonName: String, withHeart: Boolean
+    pokemonName: String, withHeart: Boolean, onBackClicked: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -56,13 +57,16 @@ fun NameTopBar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(
-            {}) {
+            onClick = onBackClicked
+        ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back"
             )
         }
         Text(
-            text = pokemonName, style = AppTypography.headlineSmall, fontWeight = FontWeight.Bold
+            text = pokemonName.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
+            style = AppTypography.headlineSmall,
+            fontWeight = FontWeight.Bold
         )
         if (withHeart) {
             BookmarkPageHeart()
@@ -81,5 +85,5 @@ fun NameTopBar(
 @Preview
 @Composable
 fun PreviewTopBar() {
-    NameTopBar("Piplup", true)
+    NameTopBar("Piplup", true, onBackClicked = {})
 }

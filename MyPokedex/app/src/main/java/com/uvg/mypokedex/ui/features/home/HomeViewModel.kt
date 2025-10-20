@@ -29,27 +29,27 @@ enum class SortOrder {
 class HomeViewModel(
     private val repository: PokemonRepository = PokemonRepository()
 ) : ViewModel() {
-
+    
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
-
+    
     private var currentOffset = 0
     private val pageSize = 20
     private var isLoadingMore = false
     private var hasMoreData = true
-
+    
     init {
         loadPokemonList()
     }
-
+    
     fun loadPokemonList() {
         if (isLoadingMore || !hasMoreData) return
-
+        
         isLoadingMore = true
-
+        
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
-
+            
             repository.getPokemonList(pageSize, currentOffset).collect { result ->
                 when (result) {
                     is Result.Loading -> {
@@ -58,7 +58,7 @@ class HomeViewModel(
                     is Result.Success -> {
                         val newList = result.data
                         hasMoreData = newList.size == pageSize
-
+                        
                         _uiState.update { currentState ->
                             val updatedList = (currentState.pokemonList + newList).distinctBy { it.id }
                             currentState.copy(
@@ -67,7 +67,7 @@ class HomeViewModel(
                                 error = null
                             )
                         }
-
+                        
                         currentOffset += pageSize
                         isLoadingMore = false
                     }
@@ -84,11 +84,11 @@ class HomeViewModel(
             }
         }
     }
-
+    
     fun searchPokemon(query: String) {
         _uiState.update { it.copy(searchQuery = query) }
     }
-
+    
     fun setSortOrder(order: SortOrder) {
         _uiState.update { currentState ->
             currentState.copy(
@@ -97,12 +97,12 @@ class HomeViewModel(
             )
         }
     }
-
+    
     fun retryLoading() {
         _uiState.update { it.copy(error = null) }
         loadPokemonList()
     }
-
+    
     private fun applySorting(list: List<Pokemon>, order: SortOrder): List<Pokemon> {
         return when (order) {
             SortOrder.BY_NUMBER -> list.sortedBy { it.id }
@@ -110,7 +110,7 @@ class HomeViewModel(
             SortOrder.BY_NAME_DESC -> list.sortedByDescending { it.name }
         }
     }
-
+    
     fun getFilteredPokemon(): List<Pokemon> {
         val currentState = _uiState.value
         return if (currentState.searchQuery.isBlank()) {
