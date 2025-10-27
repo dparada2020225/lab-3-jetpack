@@ -1,193 +1,421 @@
 package com.uvg.mypokedex.ui.features.home
 
-import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Wifi
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.uvg.mypokedex.data.model.Pokemon
+import com.uvg.mypokedex.data.network.ConnectivityObserver
+import com.uvg.mypokedex.data.preferences.SortOrder
 import com.uvg.mypokedex.navigation.AppScreen
 import com.uvg.mypokedex.ui.components.PokemonCard
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
 
-fun filterPokemon(pokemonList: List<Pokemon>, searchText: String): List<Pokemon> {
-    return if (searchText.isBlank()) {
-        pokemonList
-    } else {
-        pokemonList.filter { it.name.contains(searchText, true) }
-    }
-}
-
-fun orderPokemon(pokemonList: List<Pokemon>, order: String): List<Pokemon> {
-    return when (order) {
-        "true" -> {
-            pokemonList.sortedBy { it.name }
-        }
-
-        "false" -> {
-            pokemonList.sortedByDescending { it.name }
-        }
-
-        else -> {
-            pokemonList
-        }
-    }
-}
-
+/**
+ * Pantalla principal de la Pokédex.
+ * Muestra una lista de Pokémon con funcionalidades de:
+ * - Filtrado por nombre
+ * - Ordenamiento persistente
+ * - Indicador de conectividad
+ * - Cache-first loading
+ */
 @Composable
 fun HomeScreen(
-    navController: NavController, viewModel: HomeViewModel = HomeViewModel(LocalContext.current)
+    navController: NavController,
+    viewModel: HomeViewModel = HomeViewModel(LocalContext.current)
 ) {
-    val lazyGridState = rememberLazyGridState()
-    var ordered by rememberSaveable { mutableStateOf("null") }
+    // Observar estados del ViewModel
+    val pokemonList by viewModel.pokemonList.collectAsState()
+    val networkStatus by viewModel.networkStatus.collectAsState()
+    val currentSortOrder by viewModel.currentSortOrder.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val statusMessage by viewModel.statusMessage.collectAsState()
+
+    // Estados locales de UI
     var expanded by rememberSaveable { mutableStateOf(false) }
     var searchText by rememberSaveable { mutableStateOf("") }
 
-    val pokemonList = rememberSaveable {
-        mutableStateListOf<Pokemon>().apply {
-            val initialPokemon = viewModel.loadMorePokemon()
-            addAll(initialPokemon.distinctBy { it.id })
+    // Filtrar Pokémon según búsqueda
+    val filteredPokemon = remember(pokemonList, searchText) {
+        if (searchText.isBlank()) {
+            pokemonList
+        } else {
+            pokemonList.filter {
+                it.name.contains(searchText, ignoreCase = true)
+            }
         }
     }
 
-    val filteredAndOrdered by rememberSaveable(searchText, pokemonList, ordered) {
-        mutableStateOf(orderPokemon(filterPokemon(pokemonList, searchText), order = ordered))
-    }
-
     Scaffold { paddingValues ->
-        Column(
-            modifier = Modifier.padding(paddingValues),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(
-                modifier = Modifier.padding(20.dp), verticalAlignment = Alignment.CenterVertically
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TextField(
-                    value = searchText,
-                    onValueChange = { searchText = it },
-                    label = { Text("Filtrar por nombre") },
-                    modifier = Modifier.weight(1f),
-                    colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent
-                    ),
-                    shape = MaterialTheme.shapes.small
+                // Barra de estado de conexión
+                NetworkStatusBar(networkStatus)
+
+                // Barra de búsqueda y controles
+                SearchBar(
+                    searchText = searchText,
+                    onSearchTextChange = { searchText = it },
+                    onSearchToolsClick = {
+                        navController.navigate(AppScreen.SearchToolsDialog.route)
+                    },
+                    currentSortOrder = currentSortOrder,
+                    onSortOrderChange = { viewModel.changeSortOrder(it) },
+                    expanded = expanded,
+                    onExpandedChange = { expanded = it }
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-                FloatingActionButton(
-                    onClick = { navController.navigate(AppScreen.SearchToolsDialog.route) },
-                    modifier = Modifier.padding(horizontal = 7.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Search, contentDescription = "Search Tools"
+
+                // Contenido principal
+                if (isLoading && pokemonList.isEmpty()) {
+                    // Mostrar loading solo si no hay datos en caché
+                    LoadingState()
+                } else if (filteredPokemon.isEmpty() && searchText.isNotBlank()) {
+                    // No hay resultados de búsqueda
+                    EmptySearchState(searchText)
+                } else if (filteredPokemon.isEmpty()) {
+                    // No hay datos en absoluto
+                    EmptyState(
+                        networkStatus = networkStatus,
+                        onRetry = { viewModel.refreshCache() }
                     )
-                }
-                Box {
-                    FloatingActionButton(
-                        modifier = Modifier.padding(horizontal = 7.dp),
-                        onClick = { expanded = !expanded }) {
-                        Icon(
-                            imageVector = Icons.Filled.MoreVert,
-                            contentDescription = "Order list button"
-                        )
-                    }
-                    DropdownMenu(
-                        expanded = expanded, onDismissRequest = { expanded = false }) {
-                        DropdownMenuItem(
-                            text = { Text("Ordenar descendentemente") },
-                            onClick = { ordered = "false"; expanded = false })
-                        DropdownMenuItem(
-                            text = { Text("Ordenar ascendentemente") },
-                            onClick = { ordered = "true"; expanded = false })
-                    }
-                }
-            }
-
-            LazyVerticalGrid(
-                state = lazyGridState,
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.SpaceBetween,
-                columns = GridCells.Fixed(2)
-            ) {
-                items(
-                    items = filteredAndOrdered, key = { pokemon -> pokemon.id }) { pokemon ->
-                    PokemonCard(pokemon) {
-                        navController.currentBackStackEntry?.savedStateHandle?.set(
-                            "pokemon", pokemon
-                        )
-                        navController.navigate(AppScreen.DetailScreen.createRoute(pokemon.id))
-                    }
-                }
-            }
-
-            LaunchedEffect(lazyGridState) {
-                snapshotFlow { lazyGridState.layoutInfo }.map { layoutInfo ->
-                    val totalItems = layoutInfo.totalItemsCount
-                    val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
-                    val shouldLoad = totalItems > 0 && lastVisibleItemIndex >= totalItems - 4
-                    shouldLoad
-                }.distinctUntilChanged().filter { it }.collect {
-                    val newPokemonBatch = viewModel.loadMorePokemon()
-                    if (newPokemonBatch.isNotEmpty()) {
-
-                        // Aqui le pedi ayuda a la IA por que me daba el problema de al ordenar la lista muchas veces seguidas, se daba un ID repetido. Me recomendo hacer un set.
-
-                        val existingIds = pokemonList.map { it.id }.toSet()
-                        val uniqueNewPokemon =
-                            newPokemonBatch.filter { it.id !in existingIds }.distinctBy { it.id }
-
-                        if (uniqueNewPokemon.isNotEmpty()) {
-                            pokemonList.addAll(uniqueNewPokemon)
-                        } else {
-                            Log.d(
-                                "HomeScreen",
-                                "Error when loading new pokemon viewModel.loadMorePokemon()"
+                } else {
+                    // Mostrar lista de Pokémon
+                    PokemonGrid(
+                        pokemon = filteredPokemon,
+                        onPokemonClick = { pokemon ->
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                "pokemon", pokemon
+                            )
+                            navController.navigate(
+                                AppScreen.DetailScreen.createRoute(pokemon.id)
                             )
                         }
-                    } else {
-                        Log.d(
-                            "HomeScreen", "viewModel.loadMorePokemon() returned empty."
-                        )
-                    }
+                    )
                 }
             }
+
+            // Snackbar para mensajes de estado
+            statusMessage?.let { message ->
+                Snackbar(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.BottomCenter),
+                    action = {
+                        androidx.compose.material3.TextButton(
+                            onClick = { viewModel.clearStatusMessage() }
+                        ) {
+                            Text("OK")
+                        }
+                    }
+                ) {
+                    Text(message)
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Barra que muestra el estado de la conexión de red.
+ */
+@Composable
+private fun NetworkStatusBar(status: ConnectivityObserver.Status) {
+    val (backgroundColor, icon, text) = when (status) {
+        ConnectivityObserver.Status.AVAILABLE -> Triple(
+            Color(0xFF4CAF50),
+            Icons.Default.Wifi,
+            "Conectado"
+        )
+        ConnectivityObserver.Status.UNAVAILABLE,
+        ConnectivityObserver.Status.LOST -> Triple(
+            Color(0xFFF44336),
+            Icons.Default.CloudOff,
+            "Sin conexión - Modo offline"
+        )
+        ConnectivityObserver.Status.LOSING -> Triple(
+            Color(0xFFFF9800),
+            Icons.Default.CloudOff,
+            "Perdiendo conexión..."
+        )
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(backgroundColor)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.size(16.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.White
+        )
+    }
+}
+
+/**
+ * Barra de búsqueda con controles de ordenamiento.
+ */
+@Composable
+private fun SearchBar(
+    searchText: String,
+    onSearchTextChange: (String) -> Unit,
+    onSearchToolsClick: () -> Unit,
+    currentSortOrder: SortOrder,
+    onSortOrderChange: (SortOrder) -> Unit,
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier.padding(20.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        TextField(
+            value = searchText,
+            onValueChange = onSearchTextChange,
+            label = { Text("Filtrar por nombre") },
+            modifier = Modifier.weight(1f),
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent
+            ),
+            shape = MaterialTheme.shapes.small,
+            singleLine = true
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        FloatingActionButton(
+            onClick = onSearchToolsClick,
+            modifier = Modifier.padding(horizontal = 4.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Search,
+                contentDescription = "Herramientas de búsqueda"
+            )
+        }
+
+        Box {
+            FloatingActionButton(
+                modifier = Modifier.padding(horizontal = 4.dp),
+                onClick = { onExpandedChange(!expanded) }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.MoreVert,
+                    contentDescription = "Menú de ordenamiento"
+                )
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { onExpandedChange(false) }
+            ) {
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            "Por número ↑" + if (currentSortOrder == SortOrder.NUMBER_ASC) " ✓" else ""
+                        )
+                    },
+                    onClick = {
+                        onSortOrderChange(SortOrder.NUMBER_ASC)
+                        onExpandedChange(false)
+                    }
+                )
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            "Por número ↓" + if (currentSortOrder == SortOrder.NUMBER_DESC) " ✓" else ""
+                        )
+                    },
+                    onClick = {
+                        onSortOrderChange(SortOrder.NUMBER_DESC)
+                        onExpandedChange(false)
+                    }
+                )
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            "Por nombre A-Z" + if (currentSortOrder == SortOrder.NAME_ASC) " ✓" else ""
+                        )
+                    },
+                    onClick = {
+                        onSortOrderChange(SortOrder.NAME_ASC)
+                        onExpandedChange(false)
+                    }
+                )
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            "Por nombre Z-A" + if (currentSortOrder == SortOrder.NAME_DESC) " ✓" else ""
+                        )
+                    },
+                    onClick = {
+                        onSortOrderChange(SortOrder.NAME_DESC)
+                        onExpandedChange(false)
+                    }
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Grid de Pokémon.
+ */
+@Composable
+private fun PokemonGrid(
+    pokemon: List<com.uvg.mypokedex.data.model.Pokemon>,
+    onPokemonClick: (com.uvg.mypokedex.data.model.Pokemon) -> Unit
+) {
+    LazyVerticalGrid(
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        columns = GridCells.Fixed(2)
+    ) {
+        items(
+            items = pokemon,
+            key = { it.id }
+        ) { poke ->
+            PokemonCard(pokemon = poke, onClick = { onPokemonClick(poke) })
+        }
+    }
+}
+
+/**
+ * Estado de carga.
+ */
+@Composable
+private fun LoadingState() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            CircularProgressIndicator()
+            Spacer(modifier = Modifier.padding(16.dp))
+            Text("Cargando Pokémon...")
+        }
+    }
+}
+
+/**
+ * Estado vacío cuando no hay Pokémon.
+ */
+@Composable
+private fun EmptyState(
+    networkStatus: ConnectivityObserver.Status,
+    onRetry: () -> Unit
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(32.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.CloudOff,
+                contentDescription = null,
+                modifier = Modifier.size(64.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.padding(16.dp))
+            Text(
+                text = if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+                    "No hay Pokémon guardados"
+                } else {
+                    "Sin conexión y sin datos guardados"
+                },
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.padding(8.dp))
+            if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+                androidx.compose.material3.Button(onClick = onRetry) {
+                    Text("Cargar datos")
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Estado cuando no hay resultados de búsqueda.
+ */
+@Composable
+private fun EmptySearchState(searchText: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(32.dp)
+        ) {
+            Text(
+                text = "No se encontraron Pokémon",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.padding(8.dp))
+            Text(
+                text = "con el nombre \"$searchText\"",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
