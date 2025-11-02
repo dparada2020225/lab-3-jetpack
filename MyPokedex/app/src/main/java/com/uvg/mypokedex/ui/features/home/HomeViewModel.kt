@@ -20,11 +20,34 @@ data class HomeUiState(
     val sortOrder: SortOrder = SortOrder.BY_NUMBER
 )
 
-enum class SortOrder {
-    BY_NUMBER,
-    BY_NAME_ASC,
-    BY_NAME_DESC
-}
+class HomeViewModel(val context: Context) {
+    private var currentPage: Int = 0
+
+    fun getPageFileName(): String {
+        var fileName: String
+        val ending = currentPage + 1
+        fileName = if (currentPage >= 0 && currentPage < 9) {
+            "pokemon_0${currentPage}1_0${ending}0.json"
+        } else if (currentPage == 9) {
+            "pokemon_0${currentPage}1_${ending}0.json"
+        } else {
+            "pokemon_${currentPage}1_${ending}0.json"
+        }
+        currentPage++
+        return fileName
+    }
+
+    fun loadMorePokemon(
+        context: Context = this.context, fileName: String = getPageFileName()
+    ): List<Pokemon> {
+        val pokemonList = mutableListOf<Pokemon>()
+        try {
+            val inputStream = context.assets.open(fileName)
+            val jsonString =
+                inputStream.bufferedReader(Charset.defaultCharset()).use { it.readText() }
+
+            val jsonOriginalObject = JSONObject(jsonString)
+            val jsonArray = jsonOriginalObject.getJSONArray("items")
 
 class HomeViewModel(
     private val repository: PokemonRepository = PokemonRepository()
